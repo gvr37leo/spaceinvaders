@@ -8,9 +8,15 @@ wss.on('connection',(ws,req) => {
 
     })
 
-    setInterval(() => {
+    ws.on('close', (code,reason) => {
+        clearInterval(intervalid)
+    })
+
+    var intervalid = setInterval(() => {
+        console.log('send')
         ws.send(JSON.stringify({
-            message:'yo'
+            type:'test',
+            data:'yo'
         }))
     },1000)
     
