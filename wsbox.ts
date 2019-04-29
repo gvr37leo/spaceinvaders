@@ -51,14 +51,17 @@ class Client{
     history:HistoryEntry[]
 
     constructor(server:Server){
-
+        server
     }
 
     add(delta:number){
-
         this.prediction += delta
         this.onupdate.trigger(new ClientUpdate(delta,this.version),null)
         this.version++
+    }
+
+    receiveServerUpdate(){
+
     }
 }
 
@@ -66,27 +69,39 @@ class Client{
 class ClientEntry{
     client:Client
     val:number
-    
+    backlog:ClientUpdate[] = []
 }
 
 class Server{
 
     clients:ClientEntry[] = []
-
-    backlog:ClientUpdate[]
+    onupdate:EventSystem<number>
+   
 
     constructor(){
         setInterval(() => {
             for(var client of this.clients){
-
+                var acks = []
+                for(var entry of client.backlog){
+                    client.val += entry.val
+                    
+                    acks.push({
+                            
+                    })
+                }
+                client.backlog = []
+                
             }
         },3000)
     }
 
     addClient(client:Client){
+        var clientEntry = new ClientEntry()
+        clientEntry.client = client
+        clientEntry.val = 0
+        this.clients.push(clientEntry)
         client.onupdate.listen(e => {
-            this.backlog.push(e)
+            clientEntry.backlog.push(e)
         })
     }
-
 }
