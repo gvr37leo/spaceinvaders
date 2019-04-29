@@ -53,9 +53,10 @@ class Client{
 
     }
 
-    set(val:number){
-        this.prediction = val
-        this.onupdate.trigger(new ClientUpdate(val,this.version),null)
+    add(delta:number){
+
+        this.prediction += delta
+        this.onupdate.trigger(new ClientUpdate(delta,this.version),null)
         this.version++
     }
 }
@@ -69,7 +70,7 @@ class Server{
     constructor(){
         setInterval(() => {
             for(var client of this.clients){
-                
+
             }
         },3000)
     }
