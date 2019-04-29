@@ -46,6 +46,7 @@ class Client{
     onupdate:EventSystem<ClientUpdate>
     val:number
     prediction:number
+    interpolatedValue:number
     version:number
     history:HistoryEntry[]
 
@@ -61,9 +62,16 @@ class Client{
     }
 }
 
+
+class ClientEntry{
+    client:Client
+    val:number
+    
+}
+
 class Server{
 
-    clients:Client[] = []
+    clients:ClientEntry[] = []
 
     backlog:ClientUpdate[]
 
