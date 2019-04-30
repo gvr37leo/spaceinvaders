@@ -29,68 +29,92 @@ class WsBox{
     }
 }
 
-class ClientUpdate{
+class onClientUpdatePackage{
+    constructor(public delta:number,public version:number){
+
+    }
+}
+
+class onServerUpdatePackage{
     constructor(public val:number,public version:number){
 
     }
 }
 
 class HistoryEntry{
-    ack:boolean
+    // ack:boolean
     val:number
     version:number
 }
 
 class Client{
 
-    onupdate:EventSystem<ClientUpdate>
-    val:number
-    prediction:number
-    interpolatedValue:number
-    version:number
-    history:HistoryEntry[]
+    onupdate:EventSystem<onClientUpdatePackage> = new EventSystem()
+    val:number = 0
+    prediction:number = 0
+    interpolatedValue:number = 0
+    version:number = 0
+    history:onClientUpdatePackage[] = []
 
     constructor(server:Server){
-        server
+    }
+
+    onReceiveServerUpdate(e:onServerUpdatePackage){
+        if(this.history.length > 0){
+            var latestindex = e.version - this.history[0].version
+            var latest = this.history[latestindex]
+            this.history.splice(0,latestindex + 1)
+            
+            //reconstruct from latest
+            this.val = e.val
+            var latestval = e.val
+            for(var i = 0; i < this.history.length; i++){
+                latestval += this.history[i].delta
+            }
+            if(this.prediction != latestval){
+                this.prediction = latestval
+                console.log(`misprediction latest:${latestval}`)
+            }else{
+                console.log(`latest:${latestval} prediction:${this.prediction}`)
+            }
+            
+            
+            
+        }
     }
 
     add(delta:number){
+        var clientPackage = new onClientUpdatePackage(delta,this.version)
+        this.history.push(clientPackage)
+        this.onupdate.trigger(clientPackage,null)
         this.prediction += delta
-        this.onupdate.trigger(new ClientUpdate(delta,this.version),null)
         this.version++
     }
-
-    receiveServerUpdate(){
-
-    }
 }
-
 
 class ClientEntry{
     client:Client
     val:number
-    backlog:ClientUpdate[] = []
+    backlog:onClientUpdatePackage[] = []
 }
 
 class Server{
 
     clients:ClientEntry[] = []
-    onupdate:EventSystem<number>
+    onupdate:EventSystem<onServerUpdatePackage> = new EventSystem()
    
 
     constructor(){
         setInterval(() => {
-            for(var client of this.clients){
-                var acks = []
-                for(var entry of client.backlog){
-                    client.val += entry.val
-                    
-                    acks.push({
-                            
-                    })
+            for(var clientEntry of this.clients){
+                if(clientEntry.backlog.length > 0 ){
+                    for(var entry of clientEntry.backlog){
+                        clientEntry.val += entry.delta
+                    }
+                    var lastversion = clientEntry.backlog.slice(-1)[0].version
+                    clientEntry.backlog = []
+                    client.onReceiveServerUpdate(new onServerUpdatePackage(clientEntry.val,lastversion))
                 }
-                client.backlog = []
-                
             }
         },3000)
     }

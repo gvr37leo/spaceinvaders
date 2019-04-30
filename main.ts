@@ -10,11 +10,16 @@ var ctxt = crret.ctxt
 var socket = new WsBox('ws://localhost:8080/')
 
 socket.listen('test',e => {
-    console.log(e)
+    // console.log(e)
 })
 
-// loop((dt) => {
-//     ctxt.clearRect(0,0,500,500)
+var server = new Server()
 
-//     ctxt.fillRect(10,10,10,10)
-// })
+var client = new Client(server)
+server.addClient(client)
+
+setInterval(() => {
+    client.add(9)
+},1000)
+
+
