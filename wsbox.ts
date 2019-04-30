@@ -55,32 +55,33 @@ class Client{
     interpolatedValue:number = 0
     version:number = 0
     history:onClientUpdatePackage[] = []
+    lag = 2200
 
     constructor(server:Server){
     }
 
     onReceiveServerUpdate(e:onServerUpdatePackage){
-        if(this.history.length > 0){
-            var latestindex = e.version - this.history[0].version
-            var latest = this.history[latestindex]
-            this.history.splice(0,latestindex + 1)
-            
-            //reconstruct from latest
-            this.val = e.val
-            var latestval = e.val
-            for(var i = 0; i < this.history.length; i++){
-                latestval += this.history[i].delta
+        setTimeout(() => {
+            if(this.history.length > 0){
+                var latestindex = e.version - this.history[0].version
+                var latest = this.history[latestindex]
+                this.history.splice(0,latestindex + 1)
+                //cut away history from before the the version that was just received
+                
+                //reconstruct from remaining updates
+                this.val = e.val
+                var latestval = e.val
+                for(var i = 0; i < this.history.length; i++){
+                    latestval += this.history[i].delta
+                }
+                if(this.prediction != latestval){
+                    this.prediction = latestval
+                    console.log(`misprediction latest:${latestval}`)
+                }else{
+                    console.log(`latest:${latestval} prediction:${this.prediction}`)
+                }
             }
-            if(this.prediction != latestval){
-                this.prediction = latestval
-                console.log(`misprediction latest:${latestval}`)
-            }else{
-                console.log(`latest:${latestval} prediction:${this.prediction}`)
-            }
-            
-            
-            
-        }
+        },this.lag)
     }
 
     add(delta:number){
@@ -102,7 +103,7 @@ class Server{
 
     clients:ClientEntry[] = []
     onupdate:EventSystem<onServerUpdatePackage> = new EventSystem()
-   
+    updateRate = 3000
 
     constructor(){
         setInterval(() => {
@@ -116,7 +117,7 @@ class Server{
                     client.onReceiveServerUpdate(new onServerUpdatePackage(clientEntry.val,lastversion))
                 }
             }
-        },3000)
+        },this.updateRate)
     }
 
     addClient(client:Client){
