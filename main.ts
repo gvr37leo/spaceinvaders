@@ -19,7 +19,7 @@ var client = new Client(server)
 server.addClient(client)
 
 setInterval(() => {
-    client.add(9)
+    client.add(Math.floor(random(2,20)))
 },1000)
 
 

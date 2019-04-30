@@ -76,7 +76,7 @@ class Client{
                 }
                 if(this.prediction != latestval){
                     this.prediction = latestval
-                    console.log(`misprediction latest:${latestval}`)
+                    console.log(`misprediction: predicted ${this.prediction} but was ${latestval}`)
                 }else{
                     console.log(`latest:${latestval} prediction:${this.prediction}`)
                 }
