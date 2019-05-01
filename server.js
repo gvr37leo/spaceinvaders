@@ -12,13 +12,10 @@ wss.on('connection',(ws,req) => {
         clearInterval(intervalid)
     })
 
-    var intervalid = setInterval(() => {
-        console.log('send')
-        ws.send(JSON.stringify({
-            type:'test',
-            data:'yo'
-        }))
-    },1000)
+    ws.send(JSON.stringify({
+        type:'test',
+        data:'yo'
+    }))
     
 })
 
