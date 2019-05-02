@@ -7,6 +7,17 @@
 /// <reference path="src/enemy.ts" />
 /// <reference path="src/ship.ts" />
 
+//images
+//sound
+//multiplayer
+//random gen
+//only active enemys
+
+//boss
+//bullet pattern
+
+
+
 var screensize= new Vector(500,500)
 var screenRect = new Rect(new Vector(0,0),screensize)
 var crret = createCanvas(screensize.x,screensize.y)
@@ -15,13 +26,13 @@ var ctxt = crret.ctxt
 
 var ship = new Ship(new Vector(250,400))
 var bullets:Bullet[] = []
-var enemys:Enemy[] = generateEnemyChain(4,3000,250,[
+var enemys:Enemy[] = generateEnemyChain(40,3000,250,[
     screenRect.getPoint(new Vector(0,0)),
     screenRect.getPoint(new Vector(1,0.2)),
     screenRect.getPoint(new Vector(0,0.4)),
     screenRect.getPoint(new Vector(0.5,0.8)),
 ])
-var activeEnemys:number[] = []
+var activeEnemys:Enemy[] = []
 
 
 var time = 0
