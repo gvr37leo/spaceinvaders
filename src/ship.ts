@@ -2,9 +2,12 @@ class Ship{
     speed = 200
     shootcooldown = 200
     lastshottime = Date.now()
+    shootability: Ability;
 
     constructor(public pos:Vector){
-
+        this.shootability = new Ability(() => {
+            bullets.push(new Bullet(this.pos.c(),new Vector(0,-300)))
+        })
     }
 
     update(dt){
@@ -20,10 +23,8 @@ class Ship{
     }
 
     shoot(){
-        if((this.lastshottime + this.shootcooldown) < Date.now()){
-            bullets.push(new Bullet(this.pos.c(),new Vector(0,-300)))
-            this.lastshottime = Date.now()
-        }
+
+        this.shootability.tryfire()
     }
 
     draw(ctxt){
