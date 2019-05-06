@@ -2,7 +2,7 @@ class StopWatch{
 
     starttime = Date.now()
 
-    peek():number{
+    get():number{
         return to(this.starttime, Date.now())
     }
 
