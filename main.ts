@@ -26,6 +26,8 @@ var screenRect = new Rect(new Vector(0,0),screensize)
 var crret = createCanvas(screensize.x,screensize.y)
 var canvas = crret.canvas
 var ctxt = crret.ctxt
+var sw = new StopWatch()
+
 
 var ship = new Ship(new Vector(250,400))
 var bullets:Bullet[] = []

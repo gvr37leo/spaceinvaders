@@ -1,20 +1,44 @@
 class StopWatch{
 
-    starttime = Date.now()
+    starttimestamp = Date.now()
+    pausetimestamp = Date.now()
+    pausetime = 0
+    paused = true
 
     get():number{
-        return to(this.starttime, Date.now())
+        var currentamountpaused = 0
+        if(this.paused){
+            currentamountpaused = to(this.pausetimestamp,Date.now())
+        }
+        return to(this.starttimestamp, Date.now()) - (this.pausetime + currentamountpaused)
     }
+
+
 
     start(){
-        this.starttime = Date.now()
+        this.paused = false
+        this.starttimestamp = Date.now()
+        this.pausetime = 0
     }
 
-    stop(){
+    continue(){
+        if(this.paused){
+            this.paused = false
+            this.pausetime += to(this.pausetimestamp, Date.now())
+        }
+    }
 
+    pause(){
+        if(this.paused == false){
+            this.paused = true
+            this.pausetimestamp = Date.now()
+        }
     }
 
     reset(){
-
+        this.paused = true
+        this.starttimestamp = Date.now()
+        this.pausetimestamp = Date.now()
+        this.pausetime = 0
     }
 }

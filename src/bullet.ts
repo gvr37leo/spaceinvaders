@@ -38,16 +38,20 @@ class Anim{
     get(){
         switch (this.animType) {
             case AnimType.once:
+                clamp(lerp(this.begin,this.end,this.stopwatch.get() / this.duration),this.begin,this.end) 
+                break;
+            case AnimType.repeat:
+                lerp(this.begin,this.end,this.stopwatch.get() % this.duration)
+                break;
+            case AnimType.pingpong:
+
+                lerp(this.begin,this.end,this.stopwatch.get() % this.duration)
                 
                 break;
-            case AnimType.once:
-                
-                break;
-            case AnimType.once:
-                
-                break;
-            case AnimType.once:
-                
+            case AnimType.extend:
+                var dist = to(this.begin,this.end)
+                var cycles = this.stopwatch.get() / this.duration
+                return cycles * dist
                 break;
         }
     }
