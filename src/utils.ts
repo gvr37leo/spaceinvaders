@@ -1,3 +1,5 @@
+var TAU = Math.PI * 2
+
 function map(val1: number, start1: number, stop1: number, start2: number, stop2: number): number{
     return start2 + (stop2 - start2) * ((val1 - start1) / (stop1 - start1))
 }

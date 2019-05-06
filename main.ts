@@ -1,5 +1,5 @@
 /// <reference path="src/utils.ts" />
-/// <reference path="node_modules/vectorx/vector.ts" />
+/// <reference path="src/vector.ts" />
 /// <reference path="node_modules/eventsystemx/EventSystem.ts" />
 /// <reference path="src/rect.ts" />
 // <reference path="wsbox.ts" />
