@@ -19,20 +19,17 @@ class Bullet{
 
 class BulletSpawner{
     
-    firerate:number
-    bulletspeed:number
     targetAngle:Vector = new Vector(0,1)
-    anim:Anim
+    anim:Anim = new Anim()
     ability:Ability
-    pos:Vector
+    
 
 
-    constructor(){
-        this.anim = new Anim()
-        this.anim.animType = AnimType.pingpong
+    constructor(public bulletspeed:number, public pos:Vector){
+        this.anim.animType = AnimType.extend
         this.anim.duration = 1000
-        this.anim.begin = -1
-        this.anim.end = 1
+        this.anim.begin = 0.3
+        this.anim.end = 0.5
         this.anim.stopwatch.start()
 
         this.ability = new Ability(() => {
@@ -42,7 +39,7 @@ class BulletSpawner{
             var bullet = new Bullet(this.pos.c(), dir)
             bullets.push(bullet)
         })
-        this.ability.cooldown = this.firerate
+        this.ability.cooldown = 100
     }
 
     update(){

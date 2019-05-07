@@ -8,8 +8,8 @@ class Vector{
     rotate2d(radians:number){
         var cost = Math.cos(radians)
         var sint = Math.sin(radians)
-        var x = x * cost - y * sint
-        var y = x * sint + y * cost
+        var x = this.x * cost - this.y * sint
+        var y = this.x * sint + this.y * cost
         this.x = x
         this.y = y
         return this

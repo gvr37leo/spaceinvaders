@@ -34,7 +34,7 @@ var sw = new StopWatch()
 var ship = new Ship(new Vector(250,400))
 var bullets:Bullet[] = []
 var enemybullets:Bullet[] = []
-var enemys:Enemy[] = generateEnemyChain(40,3000,250,[
+var enemys:Enemy[] = generateEnemyChain(0,3000,250,[
     screenRect.getPoint(new Vector(0,0)),
     screenRect.getPoint(new Vector(1,0.2)),
     screenRect.getPoint(new Vector(0,0.4)),
@@ -42,14 +42,9 @@ var enemys:Enemy[] = generateEnemyChain(40,3000,250,[
 ])
 var activeEnemys:Enemy[] = []
 
-
+var bulletSpawner = new BulletSpawner(100,new Vector(250,250))
 var time = 0
 var enemy2spawnI = 0
-loop(dt => {
-    update(dt)
-    draw(ctxt)
-})
-
 
 function update(dt){
     time += dt
@@ -61,7 +56,7 @@ function update(dt){
         activeEnemys.push(enemys[enemy2spawnI++])
     }
 
-
+    bulletSpawner.update()
     //filter out enemys that finished their path
     activeEnemys = activeEnemys.filter(e => (to(e.spawntimeMil,time) / 1000) * e.speed < e.pathlength)
     
@@ -94,7 +89,14 @@ function draw(ctxt){
     bullets.forEach(b => b.draw(ctxt))
     enemybullets.forEach(b => b.draw(ctxt))
     activeEnemys.forEach(e => e.draw(ctxt))
+    bulletSpawner.pos.draw(ctxt)
 }
+
+loop(dt => {
+    update(dt)
+    draw(ctxt)
+})
+
 
 
 
