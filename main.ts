@@ -9,6 +9,7 @@
 /// <reference path="src/ability.ts" />
 /// <reference path="src/stopwatch.ts" />
 /// <reference path="src/Animation.ts" />
+/// <reference path="src/abilityCatalog.ts" />
 
 
 

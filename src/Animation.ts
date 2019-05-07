@@ -27,7 +27,7 @@ class Anim{
             case AnimType.pingpong:
                 
                 var pingpongcycle = mod(cycles, 2)
-                if(pingpongcycle <=1 ){
+                if(pingpongcycle <= 1){
                     return lerp(this.begin,this.end,pingpongcycle)
                 }else{
                     return lerp(this.end,this.begin,pingpongcycle - 1)
