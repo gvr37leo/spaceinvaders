@@ -29,3 +29,7 @@ var gattlinggun = new Ability(() => {
 var wallwave = new Ability(() => {
     
 })
+
+var carrierattack = new Ability(() => {
+    
+})
