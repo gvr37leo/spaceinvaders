@@ -17,40 +17,6 @@ class Bullet{
     }
 }
 
-enum AnimType{once,repeat,pingpong,extend}
-
-class Anim{
-    animType:AnimType = AnimType.once
-    reverse:boolean
-    duration:number = 1000
-    stopwatch:StopWatch = new StopWatch()
-
-
-    path:Vector[] = []
-    begin:number = 0
-    end:number = 1
-    curve:number
-
-    constructor(){
-
-    }
-
-    get():number{
-        switch (this.animType) {
-            case AnimType.once:
-                return clamp(lerp(this.begin,this.end,this.stopwatch.get() / this.duration),this.begin,this.end) 
-            case AnimType.repeat:
-                return lerp(this.begin,this.end,this.stopwatch.get() % this.duration)
-            case AnimType.pingpong:
-                return lerp(this.begin,this.end,this.stopwatch.get() % this.duration)
-            case AnimType.extend:
-                var dist = to(this.begin,this.end)
-                var cycles = this.stopwatch.get() / this.duration
-                return cycles * dist
-        }
-    }
-}
-
 class BulletSpawner{
     
     firerate:number

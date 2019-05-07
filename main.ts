@@ -8,6 +8,8 @@
 /// <reference path="src/ship.ts" />
 /// <reference path="src/ability.ts" />
 /// <reference path="src/stopwatch.ts" />
+/// <reference path="src/Animation.ts" />
+
 
 
 //images
