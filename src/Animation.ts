@@ -38,3 +38,23 @@ class Anim{
         }
     }
 }
+
+class SpriteAnimation{
+    anim:Anim = new Anim()
+    sprites:HTMLImageElement[] = []
+
+    constructor(){
+        this.anim.stopwatch.start()
+        this.anim.begin = 0
+        this.anim.end = 1
+        this.anim.duration = 1000
+        this.anim.animType = AnimType.once
+    }
+
+    draw(ctxt:CanvasRenderingContext2D,pos:Vector){
+        if(this.sprites.length > 0){
+            var i = Math.min(Math.floor(this.anim.get() * this.sprites.length), this.sprites.length - 1) 
+            ctxt.drawImage(this.sprites[i],pos.x,pos.y)
+        }
+    }
+}
