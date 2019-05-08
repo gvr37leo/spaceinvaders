@@ -10,7 +10,6 @@ class Anim{
     path:Vector[] = []
     begin:number = 0
     end:number = 1
-    curve:number
 
     constructor(){
 

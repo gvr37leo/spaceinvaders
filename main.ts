@@ -20,7 +20,6 @@
 //background slide
 
 //boss
-//bullet pattern
 
 
 
