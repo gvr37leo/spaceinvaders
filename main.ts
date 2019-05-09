@@ -43,9 +43,16 @@ var enemys:Enemy[] = generateEnemyChain(0,3000,250,[
 var activeEnemys:Enemy[] = []
 var images = []
 var explosion
-loadImages(['images/explosion-6.png']).then(imagesL => {
+var background:HTMLImageElement
+var backgroundAnim = new Anim()
+backgroundAnim.animType = AnimType.extend
+backgroundAnim.begin = 2500
+backgroundAnim.end = 2200
+backgroundAnim.stopwatch.start()
+loadImages(['images/explosion-6.png','images/background.png']).then(imagesL => {
     images = imagesL
     explosion = new AtlasAnimation(images[0], new AtlasLayout(1,8,new Vector(48,48),new Vector(0,0),new Vector(0,0)))
+    background = images[1]
 })
  
 var bulletSpawner = new BulletSpawner(100,new Vector(250,250))
@@ -89,8 +96,12 @@ function update(dt){
     activeEnemys = activeEnemys.filter(e => enemyDestrctionSet.has(e) == false)
 }
 
-function draw(ctxt){
-    ctxt.clearRect(0,0,500,500)
+function draw(ctxt:CanvasRenderingContext2D){
+    
+    ctxt.clearRect(0,0,screensize.x,screensize.y)
+    if(background){
+        drawBackground(ctxt,background,screensize,backgroundAnim.get())
+    }
     ship.draw(ctxt)
     bullets.forEach(b => b.draw(ctxt))
     enemybullets.forEach(b => b.draw(ctxt))
@@ -99,6 +110,8 @@ function draw(ctxt){
     if(explosion){
         explosion.draw(ctxt,new Vector(10,10))
     }
+    
+    
 }
 
 loop(dt => {

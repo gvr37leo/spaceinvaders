@@ -2,7 +2,7 @@ enum AnimType{once,repeat,pingpong,extend}
 
 class Anim{
     animType:AnimType = AnimType.once
-    reverse:boolean
+    reverse:boolean = false
     duration:number = 1000
     stopwatch:StopWatch = new StopWatch()
 
@@ -130,3 +130,15 @@ class AtlasAnimation{
     }
 }
 
+function drawBackground(ctxt:CanvasRenderingContext2D,background:HTMLImageElement,canvassize:Vector,verticalScroll:number){
+    verticalScroll = mod(verticalScroll,background.height)
+    // verticalScroll = 2550
+    if(canvassize.y + verticalScroll > background.height){
+        var scroll2end = to(verticalScroll,background.height)
+        var overflow = canvassize.y - scroll2end
+        ctxt.drawImage(background,0,verticalScroll,canvassize.x,scroll2end,0,0,canvassize.x,scroll2end)
+        ctxt.drawImage(background,0,0,canvassize.x,overflow,0,scroll2end,canvassize.x,overflow)
+    }else{
+        ctxt.drawImage(background,0,verticalScroll,background.width,background.height,0,0,background.width,background.height)
+    }
+}
