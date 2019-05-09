@@ -14,11 +14,13 @@
 
 
 //images
+//background, bullet, plane, enemy
 //sound
+//shoot, explosion, background music
+
+
 //multiplayer
 //random gen
-//background slide
-
 //boss
 
 
