@@ -219,4 +219,6 @@ function last<T>(arr:T[]):T{
     return arr[arr.length - 1]
 }
 
-
+function findAndDelete(arr:any[],item:any){
+    arr.splice(arr.findIndex(v => v == item),1)
+}

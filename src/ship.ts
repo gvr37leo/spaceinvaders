@@ -7,6 +7,7 @@ class Ship{
     constructor(public pos:Vector){
         this.shootability = new Ability(() => {
             bullets.push(new Bullet(this.pos.c(),new Vector(0,-300)))
+            gunshot.play()
         })
     }
 

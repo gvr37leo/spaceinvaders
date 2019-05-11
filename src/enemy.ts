@@ -21,7 +21,16 @@ class Enemy{
 
     draw(ctxt){
         this.pos.draw(ctxt)
-        this.hitbox.draw(ctxt)
+        // this.hitbox.draw(ctxt)
+    }
+
+    die(){
+        explosion1.play()
+        var anim = new AtlasAnimation(images[0],this.pos.c(), new AtlasLayout(1,8,new Vector(48,48),new Vector(0,0),new Vector(0,0)))
+        anim.anim.duration = 500
+        anim.anim.animType = AnimType.once
+        animations.push(anim)
+        setTimeout(() => findAndDelete(animations,anim),anim.anim.duration)
     }
 }
 

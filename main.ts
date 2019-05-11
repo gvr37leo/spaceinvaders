@@ -10,6 +10,7 @@
 /// <reference path="src/stopwatch.ts" />
 /// <reference path="src/Animation.ts" />
 /// <reference path="src/abilityCatalog.ts" />
+/// <reference path="src/soundLoading.ts" />
 
 
 
@@ -17,7 +18,7 @@
 //background, bullet, plane, enemy
 //sound
 //shoot, explosion, background music
-
+  
 
 //multiplayer
 //random gen
@@ -36,7 +37,8 @@ var sw = new StopWatch()
 var ship = new Ship(new Vector(250,400))
 var bullets:Bullet[] = []
 var enemybullets:Bullet[] = []
-var enemys:Enemy[] = generateEnemyChain(0,3000,250,[
+var animations:AtlasAnimation[] = []
+var enemys:Enemy[] = generateEnemyChain(5,1000,250,[
     screenRect.getPoint(new Vector(0,0)),
     screenRect.getPoint(new Vector(1,0.2)),
     screenRect.getPoint(new Vector(0,0.4)),
@@ -44,7 +46,6 @@ var enemys:Enemy[] = generateEnemyChain(0,3000,250,[
 ])
 var activeEnemys:Enemy[] = []
 var images = []
-var explosion
 var background:HTMLImageElement
 var backgroundAnim = new Anim()
 backgroundAnim.animType = AnimType.extend
@@ -53,11 +54,9 @@ backgroundAnim.end = 2200
 backgroundAnim.stopwatch.start()
 loadImages(['images/explosion-6.png','images/background.png']).then(imagesL => {
     images = imagesL
-    explosion = new AtlasAnimation(images[0], new AtlasLayout(1,8,new Vector(48,48),new Vector(0,0),new Vector(0,0)))
     background = images[1]
 })
  
-var bulletSpawner = new BulletSpawner(100,new Vector(250,250))
 var time = 0
 var enemy2spawnI = 0
 
@@ -71,7 +70,6 @@ function update(dt){
         activeEnemys.push(enemys[enemy2spawnI++])
     }
 
-    bulletSpawner.update()
     //filter out enemys that finished their path
     activeEnemys = activeEnemys.filter(e => (to(e.spawntimeMil,time) / 1000) * e.speed < e.pathlength)
     
@@ -89,6 +87,7 @@ function update(dt){
             if(enemy.hitbox.collidePoint(bullet.pos)){
                 bulletDestructionSet.add(bullet)
                 enemyDestrctionSet.add(enemy)
+                enemy.die()
                 continue outer
             }
         }
@@ -108,10 +107,7 @@ function draw(ctxt:CanvasRenderingContext2D){
     bullets.forEach(b => b.draw(ctxt))
     enemybullets.forEach(b => b.draw(ctxt))
     activeEnemys.forEach(e => e.draw(ctxt))
-    bulletSpawner.pos.draw(ctxt)
-    if(explosion){
-        explosion.draw(ctxt,new Vector(10,10))
-    }
+    animations.forEach(a => a.draw(ctxt))
     
     
 }

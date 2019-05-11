@@ -4,6 +4,7 @@
   "description": "",
   "main": "package.js",
   "dependencies": {
+    "@types/howler": "^2.1.0",
     "eventsystemx": "^1.2.0",
     "express": "*",
     "rect3x": "*",

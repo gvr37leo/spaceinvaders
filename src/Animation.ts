@@ -72,11 +72,11 @@ function loadImages(urls:string[]):Promise<HTMLImageElement[]>{
 
 class AtlasLayout{
     constructor(
-        public rows, 
-        public columns, 
-        public imageSize,
-        public padding,
-        public offset
+        public rows:number, 
+        public columns:number, 
+        public imageSize:Vector,
+        public padding:Vector,
+        public offset:Vector,
     ){
 
     }
@@ -107,24 +107,24 @@ class SpriteAnimation{
 class AtlasAnimation{
     anim:Anim = new Anim()
     positions: Vector[];
+    halfimageSize: Vector;
     
 
-    constructor(public image:HTMLImageElement, public atlasLayout){
+    constructor(public image:HTMLImageElement,public pos:Vector, public atlasLayout:AtlasLayout){
         this.anim.stopwatch.start()
         this.anim.begin = 0
         this.anim.end = 1
         this.anim.duration = 1000
         this.anim.animType = AnimType.repeat
         this.positions = disectAtlas(this.atlasLayout.rows,this.atlasLayout.columns,this.atlasLayout.imageSize,this.atlasLayout.padding,this.atlasLayout.offset)
+        this.halfimageSize = this.atlasLayout.imageSize.c().scale(0.5)
     }
 
-    draw(ctxt:CanvasRenderingContext2D,dpos:Vector){
-        
-        
-
+    draw(ctxt:CanvasRenderingContext2D){
         if(this.positions.length > 0){
             var i = Math.min(Math.floor(this.anim.get() * this.positions.length), this.positions.length - 1) 
             var spos = this.positions[i]
+            var dpos = this.pos.c().sub(this.halfimageSize)
             ctxt.drawImage(this.image,spos.x,spos.y,this.atlasLayout.imageSize.x,this.atlasLayout.imageSize.y,dpos.x,dpos.y,this.atlasLayout.imageSize.x,this.atlasLayout.imageSize.y)
         }
     }
