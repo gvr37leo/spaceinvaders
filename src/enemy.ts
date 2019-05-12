@@ -7,9 +7,9 @@ class Enemy{
     hitbox = new Rect(new Vector(-30,-30),new Vector(30,30))
     shootability: Ability;
 
-    constructor(public pos:Vector, public spawntimeMil:number){
+    constructor(public pos:Vector, public spawntimeMil:number,public gameDB:GameDB){
         this.shootability = new Ability(() => {
-            enemybullets.push(new Bullet(this.pos.c(),new Vector(0,300)))
+            this.gameDB.enemyBullets.push(new Bullet(this.pos.c(),new Vector(0,300)))
         })
     }
 
@@ -29,8 +29,8 @@ class Enemy{
         var anim = new AtlasAnimation(images[0],this.pos.c(), new AtlasLayout(1,8,new Vector(48,48),new Vector(0,0),new Vector(0,0)))
         anim.anim.duration = 500
         anim.anim.animType = AnimType.once
-        animations.push(anim)
-        setTimeout(() => findAndDelete(animations,anim),anim.anim.duration)
+        this.gameDB.animations.push(anim)
+        setTimeout(() => findAndDelete(this.gameDB.animations,anim),anim.anim.duration)
     }
 }
 
@@ -50,11 +50,11 @@ function generateEnemys(amount:number,start:number,duration:number):Enemy[]{
 
 }
 
-function generateEnemyChain(amount:number,starttimeMil:number,timespaceMil:number,path:Vector[]):Enemy[]{
+function generateEnemyChain(amount:number,starttimeMil:number,timespaceMil:number,path:Vector[],gameDB:GameDB):Enemy[]{
     var enemys = []
 
     for(var i = 0; i < amount; i++){
-        var enemy = new Enemy(new Vector(0,0),starttimeMil + i * timespaceMil)
+        var enemy = new Enemy(new Vector(0,0),starttimeMil + i * timespaceMil,gameDB)
         enemy.path = path
         enemy.pathlength = calcpathlength(enemy.path)
         enemys.push(enemy)

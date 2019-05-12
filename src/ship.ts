@@ -4,11 +4,12 @@ class Ship{
     lastshottime = Date.now()
     shootability: Ability;
 
-    constructor(public pos:Vector){
-        this.shootability = new Ability(() => {
-            bullets.push(new Bullet(this.pos.c(),new Vector(0,-300)))
-            gunshot.play()
-        })
+    constructor(public pos:Vector,public gamedb:GameDB){
+        // this.shootability = new Ability(() => {
+        //     bullets.push(new Bullet(this.pos.c(),new Vector(0,-300)))
+        //     gunshot.play()
+        // })
+        this.shootability = createOrderlyShotgunBlastAbility(this.pos,gamedb)
     }
 
     update(dt){

@@ -1,25 +1,37 @@
 var express = require('express')
 var app = express()
 var WebSocket = require('ws')
+var {Lobby,Player,SBox} = require('serversrc/lobby.js')
 
 var wss = new WebSocket.Server({port:8080})
+
+var lobbys = []
+var players = []
+
 wss.on('connection',(ws,req) => {
-    ws.on('message', data => {
+
+    var sbox = new SBox(ws)
+
+    sbox.listen('gamestart',() => {
 
     })
+
+
 
     ws.on('close', (code,reason) => {
-        clearInterval(intervalid)
+        
     })
-
-    ws.send(JSON.stringify({
-        type:'test',
-        data:'yo'
-    }))
-    
 })
 
 app.use(express.static('./'))
+
+app.get('lobbys',(req,res) => {
+    res.send({
+        lobbys,
+        players,
+    })
+})
+
 
 app.listen(8000, () => {
     console.log('listening')

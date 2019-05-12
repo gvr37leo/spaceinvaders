@@ -10,7 +10,11 @@
 /// <reference path="src/stopwatch.ts" />
 /// <reference path="src/Animation.ts" />
 /// <reference path="src/abilityCatalog.ts" />
-/// <reference path="src/soundLoading.ts" />
+/// <reference path="src/resourceLoading.ts" />
+/// <reference path="src/scene.ts" />
+/// <reference path="src/sceneCatalog.ts" />
+
+
 
 
 
@@ -31,90 +35,22 @@ var screenRect = new Rect(new Vector(0,0),screensize)
 var crret = createCanvas(screensize.x,screensize.y)
 var canvas = crret.canvas
 var ctxt = crret.ctxt
-var sw = new StopWatch()
 
 
-var ship = new Ship(new Vector(250,400))
-var bullets:Bullet[] = []
-var enemybullets:Bullet[] = []
-var animations:AtlasAnimation[] = []
-var enemys:Enemy[] = generateEnemyChain(5,1000,250,[
-    screenRect.getPoint(new Vector(0,0)),
-    screenRect.getPoint(new Vector(1,0.2)),
-    screenRect.getPoint(new Vector(0,0.4)),
-    screenRect.getPoint(new Vector(0.5,0.8)),
-])
-var activeEnemys:Enemy[] = []
-var images = []
-var background:HTMLImageElement
-var backgroundAnim = new Anim()
-backgroundAnim.animType = AnimType.extend
-backgroundAnim.begin = 2500
-backgroundAnim.end = 2200
-backgroundAnim.stopwatch.start()
-loadImages(['images/explosion-6.png','images/background.png']).then(imagesL => {
-    images = imagesL
-    background = images[1]
-})
- 
-var time = 0
-var enemy2spawnI = 0
-
-function update(dt){
-    time += dt
-    dt /= 1000
+var mainscene = new MainScene()
 
 
 
-    while(enemy2spawnI < enemys.length && enemys[enemy2spawnI].spawntimeMil < time){
-        activeEnemys.push(enemys[enemy2spawnI++])
-    }
 
-    //filter out enemys that finished their path
-    activeEnemys = activeEnemys.filter(e => (to(e.spawntimeMil,time) / 1000) * e.speed < e.pathlength)
-    
-    ship.update(dt)
-    bullets = bullets.filter(b => (b.createdAt + b.lifespan) > Date.now())
-    bullets.forEach(b => b.update(dt))
-    enemybullets = enemybullets.filter(b => (b.createdAt + b.lifespan) > Date.now())
-    enemybullets.forEach(b => b.update(dt))
-    activeEnemys.forEach(e => e.update(time))
 
-    var bulletDestructionSet = new Set<Bullet>()
-    var enemyDestrctionSet = new Set<Enemy>()
-    outer:for(var bullet of bullets){
-        for(var enemy of activeEnemys){
-            if(enemy.hitbox.collidePoint(bullet.pos)){
-                bulletDestructionSet.add(bullet)
-                enemyDestrctionSet.add(enemy)
-                enemy.die()
-                continue outer
-            }
-        }
-    }
 
-    bullets = bullets.filter(b => bulletDestructionSet.has(b) == false)
-    activeEnemys = activeEnemys.filter(e => enemyDestrctionSet.has(e) == false)
-}
 
-function draw(ctxt:CanvasRenderingContext2D){
-    
-    ctxt.clearRect(0,0,screensize.x,screensize.y)
-    if(background){
-        drawBackground(ctxt,background,screensize,backgroundAnim.get())
-    }
-    ship.draw(ctxt)
-    bullets.forEach(b => b.draw(ctxt))
-    enemybullets.forEach(b => b.draw(ctxt))
-    activeEnemys.forEach(e => e.draw(ctxt))
-    animations.forEach(a => a.draw(ctxt))
-    
-    
-}
 
-loop(dt => {
-    update(dt)
-    draw(ctxt)
+onResourcesLoaded.listen(() => {
+    loop(dt => {
+        mainscene.update(dt)
+        mainscene.draw(ctxt)
+    })
 })
 
 

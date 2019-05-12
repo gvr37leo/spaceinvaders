@@ -1,17 +1,17 @@
-function createAimedShotAbility(pos:Vector,target:Vector){
+function createAimedShotAbility(pos:Vector,target:Vector,gamedb:GameDB){
     var speed = 100
     return new Ability(() => {
-        bullets.push(new Bullet(pos.c(),pos.to(target).normalize().scale(speed))) 
+        gamedb.friendlyBullets.push(new Bullet(pos.c(),pos.to(target).normalize().scale(speed))) 
     })
     
 }
 
-function createInstantRingAbility(pos:Vector){
+function createInstantRingAbility(pos:Vector,gamedb:GameDB){
     var amount = 20
     var speed = 100
     return new Ability(() => {
         for(var i = 0; i < amount; i++){
-            bullets.push(new Bullet(pos.c(),new Vector(0,1).rotate2d(i / amount * TAU).scale(speed)))
+            gamedb.friendlyBullets.push(new Bullet(pos.c(),new Vector(0,1).rotate2d(i / amount * TAU).scale(speed)))
         }
     })
 }
@@ -19,7 +19,7 @@ function createInstantRingAbility(pos:Vector){
 function createLoopingRingAbility(pos:Vector,updateEvent:EventSystem<number>){
     var speed = 100
     return new Ability(() => {
-        var bulletspawner = new BulletSpawner(speed,pos)
+        var bulletSpawner = new BulletSpawner(speed,pos)
         bulletSpawner.anim.animType = AnimType.extend
         bulletSpawner.anim.begin = 0
         bulletSpawner.anim.end = 1
@@ -36,31 +36,33 @@ function createLoopingRingAbility(pos:Vector,updateEvent:EventSystem<number>){
     })
 }
 
-function createOrderlyShotgunBlastAbility(pos:Vector){
+function createOrderlyShotgunBlastAbility(pos:Vector,gamedb:GameDB){
+
     return new Ability(() => {
-        bullets.concat(bulletRingSpawn(-0.25,0.05,10,pos))
+        gamedb.friendlyBullets = gamedb.friendlyBullets.concat(shotgunwave(pos,0,5,0.125,300))
+        gunshot.play()
     })
 }
 
-function createRandomShotgunBlastAbility(pos:Vector){
+function createRandomShotgunBlastAbility(pos:Vector,gamedb:GameDB){
     var amount = 10
     var minspeed = 100
     var maxspeed = 200
     var spread = 0.2
     return new Ability(() => {
         for(var i = 0; i < amount; i++){
-            bullets.push(new Bullet(pos.c(),new Vector(0,1).rotate2d(randomSpread(0,spread)).scale(random(minspeed,maxspeed))))
+            gamedb.friendlyBullets.push(new Bullet(pos.c(),new Vector(0,1).rotate2d(randomSpread(0,spread)).scale(random(minspeed,maxspeed))))
         }
     })
 }
 
-function creategattlinggunAbility(pos:Vector,target:Vector){
+function creategattlinggunAbility(pos:Vector,target:Vector,gamedb:GameDB){
     var speed = 100
     var firerate = 200
     var timelength = 2000
     return new Ability(() => {
         var handle = setInterval(() => {
-            bullets.push(new Bullet(pos.c(),pos.to(target).normalize().scale(speed)))
+            gamedb.friendlyBullets.push(new Bullet(pos.c(),pos.to(target).normalize().scale(speed)))
         },firerate)
         setTimeout(() => {
             clearInterval(handle)
@@ -77,12 +79,24 @@ var carrierattack = new Ability(() => {
     
 })
 
-function bulletRingSpawn(begin:number,step:number,numberOfSteps:number,origin:Vector):Bullet[]{
+function bulletRingSpawn(begin:number,step:number,numberOfSteps:number,origin:Vector,speed):Bullet[]{
     var bullets:Bullet[] = []
-    var speed = 100
     for(var i = 0; i < numberOfSteps; i++){
-        var dir = new Vector(0,1).rotate2d((begin + i * step) * TAU).scale(speed)
+        var dir = new Vector(0,-1).rotate2d((begin + i * step) * TAU).scale(speed)
         bullets.push(new Bullet(origin.c(),dir))
     }
     return bullets
+}
+
+function shotgunwave(origin:Vector,dir:number,amount:number,arc:number,speed:number):Bullet[]{
+
+    if(amount > 1){
+        var arcperbullet = arc / (amount - 1)
+        var startdir = dir - arc / 2
+        return bulletRingSpawn(startdir,arcperbullet,amount,origin,speed)
+    }else if(amount == 1){
+        return bulletRingSpawn(dir,0,1,origin,speed)
+    }else{
+        return []
+    }
 }
