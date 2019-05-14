@@ -15,6 +15,7 @@ class Router{
             var result = routeRegistration.regex.exec(string)
             if(result != null){
                 routeRegistration.listener(result)
+                break
             }
         }
     }

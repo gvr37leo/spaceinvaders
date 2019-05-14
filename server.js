@@ -1,7 +1,8 @@
 var express = require('express')
 var app = express()
 var WebSocket = require('ws')
-var {Lobby,Player,SBox} = require('serversrc/lobby.js')
+var path = require('path')
+// var {Lobby,Player,SBox} = require('serversrc/lobby.js')
 
 var wss = new WebSocket.Server({port:8080})
 
@@ -31,6 +32,10 @@ app.get('lobbys',(req,res) => {
         players,
     })
 })
+
+app.all('/*', function(req, res, next) {
+    res.sendFile(path.resolve('index.html'));
+});
 
 
 app.listen(8000, () => {
