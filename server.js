@@ -26,11 +26,8 @@ wss.on('connection',(ws,req) => {
 
 app.use(express.static('./'))
 
-app.get('lobbys',(req,res) => {
-    res.send({
-        lobbys,
-        players,
-    })
+app.post('/api/:table', (req,res,next) => {
+    console.log(req.params)
 })
 
 app.all('/*', function(req, res, next) {
