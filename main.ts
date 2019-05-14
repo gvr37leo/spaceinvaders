@@ -48,12 +48,13 @@ router.listen(/^\/lobby$/,(res) => {
     var table = new Table<Lobby>([
         new Column([],(l,i) => {
             return string2html('<span>1<span>')
-        })
+        }),
+        new Column([],(l,i) => {
+            return string2html(`<a href="/lobby/${l.id}">join<a/>`)
+        }),
     ])
 
     table.load([
-        new Lobby(),
-        new Lobby(),
         new Lobby(),
     ])
 
