@@ -37,7 +37,7 @@ class BulletSpawner{
             var offset = this.anim.get()
             dir.rotate2d(offset * TAU).scale(this.bulletspeed)
             var bullet = new Bullet(this.pos.c(), dir)
-            bullets.push(bullet)
+            // bullets.push(bullet)
         })
         this.ability.cooldown = 100
     }
