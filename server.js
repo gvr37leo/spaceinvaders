@@ -86,9 +86,14 @@ app.post('/api/:table', (req,res,next) => {
 app.post('/api/search/:table', (req,res,next) => {
     var store = db.getStore(req.params.table)
     var result = []
-    var objects = store.data.values()
+    var objects = Array.from(store.data.values())
 
-    res.send(objects)
+    
+    res.send({
+        data:objects,
+        tablesize:0,
+        unpagedResultSize:0,
+    })
 })
 
 app.put('/api/:table', (req,res,next) => {
@@ -103,7 +108,7 @@ app.put('/api/:table', (req,res,next) => {
 app.delete('/api/:table',(req,res,next) => {
     var store = db.getStore(req.params.table)
     var ids = []
-    for(var id of req.data){
+    for(var id of req.body){
         if(store.del(id)){
             ids.push(id)
         }

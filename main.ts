@@ -45,6 +45,12 @@ class Lobby{
     id = 0
 }
 
+class Player{
+    id = 0
+    lobby = 0
+    ws = 0
+}
+
 router.listen(/^\/lobby$/,(res) => {
     var table = new Table<Lobby>([
         new Column([],(l,i) => {
@@ -56,29 +62,45 @@ router.listen(/^\/lobby$/,(res) => {
         new Column([],(l,i) => {
             var button = string2html(`<button>delete</button>`)
             button.addEventListener('click',() => {
-                delLobby(l.id)
+                delLobby(l.id).then(v => {
+                    refresh()
+                })
             })
             return button
         }),
     ])
 
+    function refresh(){
+        getLobbys().then(res => {
+            table.load(res.data)
+        })
+    }
+
     var createbutton = string2html('<button>create</button>')
     createbutton.addEventListener('click',() => {
         createLobby(new Lobby()).then(id => {
-
+            refresh()
         })
     })
     document.body.append(createbutton)
     document.body.append(table.element)
 
-    getLobbys().then(res => {
-        // table.load(res.data)
-    })
+    refresh()
     
 })
 
 router.listen(/^\/lobby\/([0-9]+)$/,(res) => {
-    debugger
+    var lobbyid = res[1]
+    //create websocket
+    //socket join lobby
+    //serverside add player to lobby store ws
+
+    var table = new Table<Player>([
+        new Column([],(obj,i) => {
+
+            return string2html(`<span>${obj.id}</span>`)
+        })
+    ])
 })
 
 router.listen(/^\/game\/id$/,(res) => {
