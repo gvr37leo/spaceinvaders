@@ -3,12 +3,13 @@ var app = express()
 var WebSocket = require('ws')
 var path = require('path')
 var bodyParser = require('body-parser')
-// var {Lobby,Player,SBox} = require('serversrc/lobby.js')
+var {Lobby,Player,SBox} = require('./serversrc/lobby.js')
 app.use(bodyParser.json())
 var wss = new WebSocket.Server({port:8080})
 
 class Store{
-
+    data
+    idcounter
 
     constructor(){
         this.data = new Map()
@@ -42,7 +43,7 @@ class Store{
 }
 
 class DB{
-
+    stores
 
     constructor(){
         this.stores = new Map()
@@ -59,10 +60,18 @@ var db = new DB()
 wss.on('connection',(ws,req) => {
 
     var sbox = new SBox(ws)
-
-    sbox.listen('gamestart',() => {
-
+    sbox.listen('join',(data) => {
+        var playerstore = db.getStore('player')
+        var player = new Player()
+        player.lobby = data
+        var id = playerstore.add(player)
+        ws.on('close', (code,reason) => {
+            playerstore.del(id)
+        })
     })
+    // sbox.listen('gamestart',() => {
+
+    // })
 
     ws.on('close', (code,reason) => {
         
@@ -72,9 +81,6 @@ wss.on('connection',(ws,req) => {
 app.use(express.static('./'))
 
 app.post('/api/:table', (req,res,next) => {
-    console.log(req.params)
-    console.log(req.body)
-
     var store = db.getStore(req.params.table)
     var ids = []
     for(var obj of req.body){

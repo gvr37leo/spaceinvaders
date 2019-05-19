@@ -1,17 +1,22 @@
 
 class Lobby{
-    game
+    constructor(){
+        this.game = game()
+
+
+    }
+
+    getPlayers(db,store){
+
+    }
 }
 
 class Player{
-    lobby
-    isLobbyleader
-    socket
-    
+
 }
 
+
 class SBox{
-    socket;
 
     constructor(socket){
         this.socket = socket
@@ -39,4 +44,10 @@ class SBox{
             }
         })
     }
+}
+
+module.exports = {
+    Lobby,
+    Player,
+    SBox,
 }

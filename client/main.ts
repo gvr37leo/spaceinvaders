@@ -1,21 +1,21 @@
-/// <reference path="src/utils.ts" />
-/// <reference path="src/vector.ts" />
-/// <reference path="node_modules/eventsystemx/EventSystem.ts" />
-/// <reference path="src/rect.ts" />
-// <reference path="wsbox.ts" />
-/// <reference path="src/bullet.ts" />
-/// <reference path="src/enemy.ts" />
-/// <reference path="src/ship.ts" />
-/// <reference path="src/ability.ts" />
-/// <reference path="src/stopwatch.ts" />
-/// <reference path="src/Animation.ts" />
-/// <reference path="src/abilityCatalog.ts" />
-/// <reference path="src/resourceLoading.ts" />
-/// <reference path="src/scene.ts" />
-/// <reference path="src/sceneCatalog.ts" />
-/// <reference path="src/router.ts" />
-/// <reference path="src/table.ts" />
-/// <reference path="src/ajax.ts" />
+/// <reference path="../shared/utils.ts" />
+/// <reference path="../shared/vector.ts" />
+/// <reference path="../node_modules/eventsystemx/EventSystem.ts" />
+/// <reference path="../shared/rect.ts" />
+/// <reference path="../shared/bullet.ts" />
+/// <reference path="../shared/enemy.ts" />
+/// <reference path="../shared/ship.ts" />
+/// <reference path="../shared/ability.ts" />
+/// <reference path="../shared/stopwatch.ts" />
+/// <reference path="../shared/Animation.ts" />
+/// <reference path="../shared/abilityCatalog.ts" />
+/// <reference path="../shared/resourceLoading.ts" />
+/// <reference path="../shared/scene.ts" />
+/// <reference path="../shared/sceneCatalog.ts" />
+/// <reference path="../shared/router.ts" />
+/// <reference path="../shared/table.ts" />
+/// <reference path="../shared/ajax.ts" />
+/// <reference path="../shared/wsbox.ts" />
 
 
 
@@ -48,7 +48,6 @@ class Lobby{
 class Player{
     id = 0
     lobby = 0
-    ws = 0
 }
 
 router.listen(/^\/lobby$/,(res) => {
@@ -90,10 +89,19 @@ router.listen(/^\/lobby$/,(res) => {
 })
 
 router.listen(/^\/lobby\/([0-9]+)$/,(res) => {
-    var lobbyid = res[1]
+    var lobbyid = parseInt(res[1])
     //create websocket
     //socket join lobby
     //serverside add player to lobby store ws
+    var ws = new WsBox('ws://localhost:8080')
+    ws.socket.addEventListener('open', () => {
+        ws.send('join',lobbyid)
+        getLobby(lobbyid)
+        getPlayers(lobbyid).then(fr => {
+            table.load(fr.data)
+        })
+    })
+    
 
     var table = new Table<Player>([
         new Column([],(obj,i) => {
@@ -101,9 +109,11 @@ router.listen(/^\/lobby\/([0-9]+)$/,(res) => {
             return string2html(`<span>${obj.id}</span>`)
         })
     ])
+    document.body.append(table.element)
 })
 
-router.listen(/^\/game\/id$/,(res) => {
+router.listen(/^\/game\/([0-9]+)$/,(res) => {
+    var gameid = parseInt(res[1])
     var crret = createCanvas(screensize.x,screensize.y);
     var canvas = crret.canvas;
     var ctxt = crret.ctxt;
