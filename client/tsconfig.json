@@ -1,0 +1,11 @@
+{
+    "compilerOptions": {
+        "inlineSourceMap": true,
+        "watch": true,
+        "outFile": "package.js",
+        "target": "es6",
+    },
+    "files": [
+        "main.ts"
+    ]
+}

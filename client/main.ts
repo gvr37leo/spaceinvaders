@@ -14,7 +14,7 @@
 /// <reference path="../shared/sceneCatalog.ts" />
 /// <reference path="../shared/router.ts" />
 /// <reference path="../shared/table.ts" />
-/// <reference path="../shared/ajax.ts" />
+/// <reference path="ajax.ts" />
 /// <reference path="../shared/wsbox.ts" />
 
 

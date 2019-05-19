@@ -1,0 +1,11 @@
+{
+    "compilerOptions": {
+        "inlineSourceMap": true,
+        "watch": true,
+        "outFile": "server.js",
+        "target": "es6",
+    },
+    "files": [
+        "server.ts"
+    ]
+}

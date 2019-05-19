@@ -1,7 +1,7 @@
 
 class Lobby{
+    game
     constructor(){
-        this.game = game()
 
 
     }
@@ -12,11 +12,12 @@ class Lobby{
 }
 
 class Player{
-
+    lobby
 }
 
 
 class SBox{
+    socket
 
     constructor(socket){
         this.socket = socket

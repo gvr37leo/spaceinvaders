@@ -5,6 +5,7 @@
   "main": "package.js",
   "dependencies": {
     "@types/howler": "^2.1.0",
+    "@types/node": "^12.0.2",
     "eventsystemx": "^1.2.0",
     "express": "*",
     "rect3x": "*",

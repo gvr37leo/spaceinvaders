@@ -1,11 +1,13 @@
+/// <reference path="lobby.ts" />
+
+
 var express = require('express')
 var app = express()
-var WebSocket = require('ws')
+var wsWebSocket = require('ws')
 var path = require('path')
 var bodyParser = require('body-parser')
-var {Lobby,Player,SBox} = require('./serversrc/lobby.js')
 app.use(bodyParser.json())
-var wss = new WebSocket.Server({port:8080})
+var wss = new wsWebSocket.Server({port:8080})
 
 class Store{
     data
@@ -78,7 +80,7 @@ wss.on('connection',(ws,req) => {
     })
 })
 
-app.use(express.static('./'))
+app.use(express.static('../'))
 
 app.post('/api/:table', (req,res,next) => {
     var store = db.getStore(req.params.table)
