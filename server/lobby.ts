@@ -1,3 +1,7 @@
+/// <reference path="../node_modules/@types/ws/index.d.ts" />
+
+
+
 
 class Lobby{
     game
@@ -12,14 +16,14 @@ class Lobby{
 }
 
 class Player{
-    lobby
+    lobby:number
 }
 
 
 class SBox{
-    socket
+    
 
-    constructor(socket){
+    constructor(public socket:WebSocket){
         this.socket = socket
         this.socket.addEventListener('open', () => {
 
@@ -30,14 +34,14 @@ class SBox{
         })
     }
 
-    send(type,data){
+    send(type:string,data){
         this.socket.send(JSON.stringify({
             type:type,
             data:data,
         }))
     }
 
-    listen(type,cb){
+    listen(type:string,cb){
         this.socket.addEventListener('message',e => {
             var res = JSON.parse(e.data)
             if(res.type == type){
