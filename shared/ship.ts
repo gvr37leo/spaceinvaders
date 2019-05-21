@@ -1,3 +1,8 @@
+/// <reference path="ability.ts" />
+/// <reference path="abilityCatalog.ts" />
+
+
+
 class Ship{
     speed = 200
     shootcooldown = 200
@@ -13,15 +18,15 @@ class Ship{
     }
 
     update(dt){
-        var move = getMoveInputYFlipped()
-        if(move.length() > 0){
-            move.normalize()
-        }
-        this.pos.add(move.scale(this.speed).scale(dt))
+        // var move = getMoveInputYFlipped()
+        // if(move.length() > 0){
+        //     move.normalize()
+        // }
+        // this.pos.add(move.scale(this.speed).scale(dt))
 
-        if(keys[32]){
-            this.shoot()
-        }
+        // if(keys[32]){
+        //     this.shoot()
+        // }
     }
 
     shoot(){

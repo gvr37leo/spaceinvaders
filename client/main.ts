@@ -17,6 +17,8 @@
 /// <reference path="ajax.ts" />
 /// <reference path="../shared/wsbox.ts" />
 
+import { Socket } from "dgram";
+
 
 
 
@@ -117,11 +119,36 @@ router.listen(/^\/game\/([0-9]+)$/,(res) => {
     var crret = createCanvas(screensize.x,screensize.y);
     var canvas = crret.canvas;
     var ctxt = crret.ctxt;
-    var mainscene = new MainScene()
+    var mainscene = new MainScene(screenRect)
     onResourcesLoaded.listen(() => {
         loop(dt => {
             mainscene.update(dt)
             mainscene.draw(ctxt)
+        })
+    })
+
+    var ws = new WsBox('ws://localhost:8080')
+    ws.socket.addEventListener('open', () => {
+
+        //send inputs to the server
+        ws.send('input',{
+            move:getMoveInputYFlipped(),
+            shoot:keys[32],
+        })
+
+        ws.listen('serverupdate',(data) => {
+            data.activeEnemys
+            data.activeEnemys
+            data.activeEnemys
+            data.activeEnemys
+            data.activeEnemys
+
+            mainscene.gameDB.activeEnemys
+            mainscene.gameDB.animations
+            mainscene.gameDB.enemyBullets
+            mainscene.gameDB.enemys
+            mainscene.gameDB.friendlyBullets
+            mainscene.gameDB.ships
         })
     })
 })

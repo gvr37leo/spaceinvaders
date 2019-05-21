@@ -15,6 +15,15 @@ class Bullet{
     draw(ctxt){
         this.pos.draw(ctxt)
     }
+
+    serialize(){
+        return {
+            createdAt:this.createdAt,
+            lifespan:this.lifespan,
+            pos:this.pos,
+            vel:this.vel
+        }
+    }
 }
 
 class BulletSpawner{

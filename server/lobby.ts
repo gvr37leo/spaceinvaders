@@ -1,10 +1,9 @@
-/// <reference path="../node_modules/@types/ws/index.d.ts" />
-
+/// <reference types="ws" />
 
 
 
 class Lobby{
-    game
+    gameid:number
     constructor(){
 
 

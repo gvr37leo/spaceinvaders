@@ -1,3 +1,5 @@
+/// <reference path="stopwatch.ts" />
+
 enum AnimType{once,repeat,pingpong,extend}
 
 class Anim{
@@ -110,7 +112,7 @@ class AtlasAnimation{
     halfimageSize: Vector;
     
 
-    constructor(public image:HTMLImageElement,public pos:Vector, public atlasLayout:AtlasLayout){
+    constructor(public imageid:number,public pos:Vector, public atlasLayout:AtlasLayout){
         this.anim.stopwatch.start()
         this.anim.begin = 0
         this.anim.end = 1
@@ -120,12 +122,12 @@ class AtlasAnimation{
         this.halfimageSize = this.atlasLayout.imageSize.c().scale(0.5)
     }
 
-    draw(ctxt:CanvasRenderingContext2D){
+    draw(ctxt:CanvasRenderingContext2D,images:HTMLImageElement[]){
         if(this.positions.length > 0){
             var i = Math.min(Math.floor(this.anim.get() * this.positions.length), this.positions.length - 1) 
             var spos = this.positions[i]
             var dpos = this.pos.c().sub(this.halfimageSize)
-            ctxt.drawImage(this.image,spos.x,spos.y,this.atlasLayout.imageSize.x,this.atlasLayout.imageSize.y,dpos.x,dpos.y,this.atlasLayout.imageSize.x,this.atlasLayout.imageSize.y)
+            ctxt.drawImage(images[this.imageid],spos.x,spos.y,this.atlasLayout.imageSize.x,this.atlasLayout.imageSize.y,dpos.x,dpos.y,this.atlasLayout.imageSize.x,this.atlasLayout.imageSize.y)
         }
     }
 }

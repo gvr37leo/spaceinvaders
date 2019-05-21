@@ -25,12 +25,16 @@ class Enemy{
     }
 
     die(){
-        explosion1.play()
-        var anim = new AtlasAnimation(images[0],this.pos.c(), new AtlasLayout(1,8,new Vector(48,48),new Vector(0,0),new Vector(0,0)))
+        // explosion1.play()
+        var anim = new AtlasAnimation(0,this.pos.c(), new AtlasLayout(1,8,new Vector(48,48),new Vector(0,0),new Vector(0,0)))
         anim.anim.duration = 500
         anim.anim.animType = AnimType.once
         this.gameDB.animations.push(anim)
         setTimeout(() => findAndDelete(this.gameDB.animations,anim),anim.anim.duration)
+    }
+
+    serialize(){
+
     }
 }
 

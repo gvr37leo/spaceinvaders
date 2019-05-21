@@ -1,3 +1,17 @@
+/// <reference path="ship.ts" />
+/// <reference path="enemy.ts" />
+/// <reference path="bullet.ts" />
+/// <reference path="Animation.ts" />
+/// <reference path="vector.ts" />
+/// <reference path="scene.ts" />
+/// <reference path="utils.ts" />
+/// <reference path="rect.ts" />
+
+
+
+
+
+
 class GameDB{
     ships:Ship[] = []
     enemys:Enemy[] = []
@@ -13,20 +27,20 @@ class GameDB{
 var time = 0
 
 class MainScene implements IScene{
-    
+    background
     enemy2spawnI = 0
     gameDB:GameDB = new GameDB()
     backgroundAnim: any;
 
-    constructor(){
+    constructor(public screenRect:Rect){
         this.gameDB.ships = [new Ship(new Vector(250,400),this.gameDB)]
         this.gameDB.friendlyBullets = []
         this.gameDB.enemyBullets = []
         this.gameDB.enemys = generateEnemyChain(5,1000,250,[
-            screenRect.getPoint(new Vector(0,0)),
-            screenRect.getPoint(new Vector(1,0.2)),
-            screenRect.getPoint(new Vector(0,0.4)),
-            screenRect.getPoint(new Vector(0.5,0.8)),
+            this.screenRect.getPoint(new Vector(0,0)),
+            this.screenRect.getPoint(new Vector(1,0.2)),
+            this.screenRect.getPoint(new Vector(0,0.4)),
+            this.screenRect.getPoint(new Vector(0.5,0.8)),
         ],this.gameDB)
         var activeEnemys:Enemy[] = []
 
@@ -35,6 +49,10 @@ class MainScene implements IScene{
         this.backgroundAnim.begin = 2500
         this.backgroundAnim.end = 2200
         this.backgroundAnim.stopwatch.start()
+    }
+
+    loadResources(){
+
     }
 
     update(dt: number): void {
@@ -58,12 +76,12 @@ class MainScene implements IScene{
         this.gameDB.activeEnemys.forEach(e => e.update(time))
     
         var bulletDestructionSet = new Set<Bullet>()
-        var enemyDestrctionSet = new Set<Enemy>()
+        var enemyDestructionSet = new Set<Enemy>()
         outer:for(var bullet of this.gameDB.friendlyBullets){
             for(var enemy of this.gameDB.activeEnemys){
                 if(enemy.hitbox.collidePoint(bullet.pos)){
                     bulletDestructionSet.add(bullet)
-                    enemyDestrctionSet.add(enemy)
+                    enemyDestructionSet.add(enemy)
                     enemy.die()
                     continue outer
                 }
@@ -71,14 +89,14 @@ class MainScene implements IScene{
         }
     
         this.gameDB.friendlyBullets = this.gameDB.friendlyBullets.filter(b => bulletDestructionSet.has(b) == false)
-        this.gameDB.activeEnemys = this.gameDB.activeEnemys.filter(e => enemyDestrctionSet.has(e) == false)
+        this.gameDB.activeEnemys = this.gameDB.activeEnemys.filter(e => enemyDestructionSet.has(e) == false)
     }    
     
     
     draw(ctxt: CanvasRenderingContext2D): void {
 
         if(background){
-            drawBackground(ctxt,background,screensize,this.backgroundAnim.get())
+            drawBackground(ctxt,background,this.screenRect.size(),this.backgroundAnim.get())
         }
         this.gameDB.ships[0].draw(ctxt)
         this.gameDB.friendlyBullets.forEach(b => b.draw(ctxt))

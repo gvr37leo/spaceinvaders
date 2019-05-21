@@ -1,5 +1,9 @@
 /// <reference path="lobby.ts" />
 /// <reference path="store.ts" />
+/// <reference types="express" />
+/// <reference types="node" />
+/// <reference path="../shared/sceneCatalog.ts" />
+
 
 
 var express = require('express')
@@ -9,7 +13,7 @@ var path = require('path')
 var bodyParser = require('body-parser')
 app.use(bodyParser.json())
 var wss = new wsWebSocket.Server({port:8080})
-
+var gameMap = new Map<number,MainScene>()
 
 var db = new DB()
 
@@ -25,9 +29,13 @@ wss.on('connection',(ws,req) => {
             playerstore.del(id)
         })
     })
-    // sbox.listen('gamestart',() => {
-
-    // })
+    sbox.listen('gamestart',() => {
+        var mainscene = new MainScene(new Rect(new Vector(0,0), new Vector(500,500)))
+        setInterval(() => {
+            mainscene.update(100)
+            sbox.send('serverupdate',mainscene.gameDB)
+        },100)
+    })
 
     ws.on('close', (code,reason) => {
         
