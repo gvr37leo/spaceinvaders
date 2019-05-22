@@ -40,7 +40,6 @@ class DB{
         this.stores = new Map()
         this.stores.set('lobby',new Store())
         this.stores.set('player',new Store())
-        this.stores.set('')
     }
 
     getStore(name:string){

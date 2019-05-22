@@ -115,30 +115,30 @@ function* iter(n){
     while(i < n)yield i++;
 }
 
-var keys = {}
+// var keys = {}
 
-document.addEventListener('keydown', (e) => {
-    keys[e.keyCode] = true
-})
+// document.addEventListener('keydown', (e) => {
+//     keys[e.keyCode] = true
+// })
 
-document.addEventListener('keyup', (e) => {
-    keys[e.keyCode] = false
-})
+// document.addEventListener('keyup', (e) => {
+//     keys[e.keyCode] = false
+// })
 
-function getMoveInput():Vector{
-    var dir = new Vector(0,0)
-    if(keys[37] || keys[65])dir.x--//left
-    if(keys[38] || keys[87])dir.y++//up
-    if(keys[39] || keys[68])dir.x++//right
-    if(keys[40] || keys[83])dir.y--//down
-    return dir;
-}
+// function getMoveInput():Vector{
+//     var dir = new Vector(0,0)
+//     if(keys[37] || keys[65])dir.x--//left
+//     if(keys[38] || keys[87])dir.y++//up
+//     if(keys[39] || keys[68])dir.x++//right
+//     if(keys[40] || keys[83])dir.y--//down
+//     return dir;
+// }
 
-function getMoveInputYFlipped():Vector{
-    var input = getMoveInput()
-    input.y *= -1
-    return input
-}
+// function getMoveInputYFlipped():Vector{
+//     var input = getMoveInput()
+//     input.y *= -1
+//     return input
+// }
 
 function getFiles(strings:string[]){
     var promises = []

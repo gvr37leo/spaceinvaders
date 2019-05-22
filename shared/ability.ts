@@ -1,3 +1,5 @@
+/// <reference path="../node_modules/eventsystemx/EventSystem.ts" />
+
 
 class Rule{
 

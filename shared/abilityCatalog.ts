@@ -40,7 +40,7 @@ function createOrderlyShotgunBlastAbility(pos:Vector,gamedb:GameDB){
 
     return new Ability(() => {
         gamedb.friendlyBullets = gamedb.friendlyBullets.concat(shotgunwave(pos,0,5,0.125,300))
-        gunshot.play()
+        // gunshot.play()
     })
 }
 

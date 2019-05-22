@@ -95,14 +95,14 @@ class MainScene implements IScene{
     
     draw(ctxt: CanvasRenderingContext2D): void {
 
-        if(background){
-            drawBackground(ctxt,background,this.screenRect.size(),this.backgroundAnim.get())
-        }
+        // if(background){
+        //     drawBackground(ctxt,background,this.screenRect.size(),this.backgroundAnim.get())
+        // }
         this.gameDB.ships[0].draw(ctxt)
         this.gameDB.friendlyBullets.forEach(b => b.draw(ctxt))
         this.gameDB.enemyBullets.forEach(b => b.draw(ctxt))
         this.gameDB.activeEnemys.forEach(e => e.draw(ctxt))
-        this.gameDB.animations.forEach(a => a.draw(ctxt))
+        // this.gameDB.animations.forEach(a => a.draw(ctxt))
     }
 }
 
